@@ -26,8 +26,6 @@ class App extends Component {
             user: res,
             login 
           });
-
-          console.log(this.state);
         })
         .catch(err => console.log(err));
     });
@@ -41,7 +39,7 @@ class App extends Component {
         <p>Loading...</p>
       </main>
     } else if (this.state.login) {
-      return <Chat />;
+      return <Chat user={this.state.user} />;
     }
 
     return <Login />;
