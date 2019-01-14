@@ -30,8 +30,9 @@ const styles = theme => ({
     width: '90%',
     margin: theme.spacing.unit,
   },
-  margin: {
-    
+  margin: {},
+  listItemFix: {
+    paddingLeft: 0,
   },
 });
 
@@ -136,7 +137,7 @@ export class ChatRoomPane extends Component {
             <ListItem key={message.createdAt} className={verifyIdEquality(this.props.user.id, message.user.id) ? classes.listItemLeft : classes.listItemRight}>
               <Paper>
                 <ListItemText>{dayjs(message.createdAt).format('DD.MM.YY HH:mm')}</ListItemText>
-                <ListItemText>{verifyIdEquality(this.props.user.id, message.user.id) ? meText : message.user.name}: {message.text}</ListItemText>
+                <ListItemText className={classes.listItemFix}>{verifyIdEquality(this.props.user.id, message.user.id) ? meText : message.user.name}: {message.text}</ListItemText>
               </Paper>
             </ListItem>
         );
