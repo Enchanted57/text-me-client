@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import client from './feathers';
 import jwt_decode from 'jwt-decode';
-
 import Login from './components/Login';
 import Chat from './components/Chat';
 
@@ -30,7 +29,13 @@ class App extends Component {
         .catch(err => console.log(err));
     });
 
+    client.on('logout', () => {
+      this.setState({
+        login: null,
+        user: null,
 
+      });
+    });
   }
 
   render() {

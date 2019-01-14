@@ -16,7 +16,8 @@ import Group from '@material-ui/icons/Group';
 
 const styles = theme => ({
   rootList: {
-    maxHeight: 800,
+    height: 700,
+    maxHeight: 700,
     overflow: 'auto'
   },
   nested: {
@@ -46,19 +47,18 @@ export class ContactsPane extends Component {
     const { user: {contacts, groups} } = this.props;
 
     const contactList = contacts.map(x => 
-      
-      <ListItem button className={classes.nested} onClick={() => this.props.handleRoomSelecetion(x)} >
+      <ListItem button className={classes.nested} onClick={() => this.props.handleRoomSelecetion(x)} key={x.id} >
         <ListItemIcon>
-          <Face />
+          <Face color="secondary" />
         </ListItemIcon>
         <ListItemText primary={x.name} />
       </ListItem>
     );
 
     const groupList = groups.map(x => 
-      <ListItem button className={classes.nested} onClick={ () => this.props.handleRoomSelecetion(x) } >
+      <ListItem button className={classes.nested} onClick={ () => this.props.handleRoomSelecetion(x) } key={x.id} >
         <ListItemIcon>
-          <GroupWork />
+          <GroupWork color="secondary" />
         </ListItemIcon>
         <ListItemText primary={x.name} />
       </ListItem>
@@ -68,7 +68,7 @@ export class ContactsPane extends Component {
       <List component="ul" className={classes.rootList} >
         <ListItem button onClick={this.handleContactsClick}>
           <ListItemIcon>
-            <Contacts />
+            <Contacts color="primary" />
           </ListItemIcon>
           <ListItemText inset primary="Contacts" />
             {this.state.openContacts ? <ExpandLess /> : <ExpandMore />}
@@ -80,7 +80,7 @@ export class ContactsPane extends Component {
         </Collapse>
         <ListItem button onClick={this.handleGroupsClick}>
           <ListItemIcon>
-            <Group />
+            <Group color="primary" />
           </ListItemIcon>
           <ListItemText inset primary="Groups" />
             {this.state.openGroups ? <ExpandLess /> : <ExpandMore />}
