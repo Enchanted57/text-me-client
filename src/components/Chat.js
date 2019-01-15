@@ -10,8 +10,22 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import PersonAdd from '@material-ui/icons/PersonAdd';
+import GroupAdd from '@material-ui/icons/GroupAdd';
 import client from '../feathers';
+
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Switch from '@material-ui/core/Switch';
 
 
 const styles = theme => ({
@@ -39,7 +53,8 @@ class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      roomId: 0
+      roomId: 0,
+      friendDialogOpen: false,
     };
   }
 
@@ -51,6 +66,16 @@ class Chat extends Component {
     }
   };
 
+  handleClickFriendOpen = () => {
+    this.setState({
+      friendDialogOpen: true,
+    });
+  }
+
+  handleClose = () => {
+    this.setState({ friendDialogOpen: false });
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -59,8 +84,11 @@ class Chat extends Component {
         <div className={classes.root}>
           <AppBar position="static">
             <Toolbar>
+              <IconButton onClick={ this.handleClickFriendOpen } className={classes.menuButton} color="inherit" aria-label="Menu">
+                <PersonAdd />
+              </IconButton>
               <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                <MenuIcon />
+                <GroupAdd />
               </IconButton>
               <Typography variant="h6" color="inherit" className={classes.grow}>
                 { this.props.user.email } - { this.props.user.name }
@@ -81,6 +109,29 @@ class Chat extends Component {
             </Paper>
           </Grid>
         </Grid>
+        
+        <Dialog
+          fullWidth
+          open={this.state.friendDialogOpen}
+          onClose={this.handleClose}
+          aria-labelledby="max-width-dialog-title"
+        >
+          <DialogTitle id="max-width-dialog-title">Optional sizes</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Select your new contact.
+            </DialogContentText>
+
+            { /* finding contact */ }
+
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
       </Fragment>
     );
   }
