@@ -45,6 +45,8 @@ export class ChatRoomPane extends Component {
       roomId: 0,
       message: '',
     };
+
+    this.messagesEnd = React.createRef();
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -59,9 +61,13 @@ export class ChatRoomPane extends Component {
     return null;
   }
 
+  scrollToBottom = () => {
+     if (this.messagesEnd.current)
+       this.messagesEnd.current.scrollIntoView();
+  }
+
   componentDidMount() {
     this.fetchChatRoom(this.state.roomId);
-
     client.service('messages').on('created', message => {
 
       if (this.state.chatRoomOrError && message.chatRoomId === this.state.chatRoomOrError.id) { 
@@ -78,8 +84,9 @@ export class ChatRoomPane extends Component {
         this.setState({
           chatRoomOrError: chatRoomCopy
         });
-        
+        this.scrollToBottom();
       }
+
     });
   }
 
@@ -145,9 +152,11 @@ export class ChatRoomPane extends Component {
         return (
           <main>
             <Fragment>
-              <List dense={true} className={classes.rootList}>
+              <List  dense={true} className={classes.rootList} >
                 { messagesList }
+                <div ref={this.messagesEnd} style={ {float:'left', clear: 'both'} } />
               </List>
+              
             </Fragment>
             <Fragment>
               <TextField
