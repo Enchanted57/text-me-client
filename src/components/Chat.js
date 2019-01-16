@@ -13,20 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import client from '../feathers';
-
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Switch from '@material-ui/core/Switch';
-
+import ListOfUsers from './ListOfUsers';
 
 const styles = theme => ({
   root: {
@@ -56,6 +48,7 @@ class Chat extends Component {
       roomId: 0,
       friendDialogOpen: false,
     };
+
   }
 
   handleRoomSelecetion = (x) => {
@@ -70,10 +63,46 @@ class Chat extends Component {
     this.setState({
       friendDialogOpen: true,
     });
+    this.fetchUsers();
   }
 
   handleClose = () => {
     this.setState({ friendDialogOpen: false });
+    this.fetchUsers();
+  }
+
+  fetchUsers = () => {
+    // const user = this.props.user;
+    // const notInArr = [user.id, ...user.contacts.map(c => c.id)];
+    // console.log(notInArr);
+    client.service('user').find({
+      query: {
+        $limit: 50,
+      },
+    })
+    .then(res => {
+      const notInArr = [this.props.user.id, ...this.props.user.contacts.map(c => c.id)];
+      this.setState({
+        possibleContacts: res.data.filter(x => notInArr.indexOf(x.id) === -1),
+      });
+    })
+    .catch(err => console.log(err));
+
+  }
+
+
+
+  componentDidMount() {
+    client.service('contacts').on('created', contactPayload => {
+      //const contactId = this.props.user.id === contactPayload.userId ? contactPayload.friendId : contactPayload.userId;
+      client.service('user-details').get(this.props.user.id)
+        .then(res => {
+          this.props.updateUser(res);
+        })
+        .catch(err => console.log(err));
+    });
+
+    this.fetchUsers();
   }
 
   render() {
@@ -122,7 +151,7 @@ class Chat extends Component {
               Select your new contact.
             </DialogContentText>
 
-            { /* finding contact */ }
+            <ListOfUsers contacts={this.state.possibleContacts} user={this.props.user} />
 
           </DialogContent>
           <DialogActions>
@@ -138,7 +167,8 @@ class Chat extends Component {
 }
 
 Chat.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  updateUser: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(Chat)

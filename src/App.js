@@ -12,6 +12,13 @@ class App extends Component {
     this.state = {};
   }
 
+  updateUser = (user) => {
+    console.log('we rock!');
+    this.setState({
+      user
+    });
+  }
+
   componentDidMount() {
     const userDetails = client.service('user-details');
     client.authenticate().catch(() => this.setState({ login: null }));
@@ -44,7 +51,7 @@ class App extends Component {
         <p>Loading...</p>
       </main>
     } else if (this.state.login) {
-      return <Chat user={this.state.user} />;
+      return <Chat user={this.state.user} updateUser={this.updateUser} />;
     }
 
     return <Login />;

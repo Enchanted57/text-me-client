@@ -34,9 +34,11 @@ const styles = theme => ({
   listItemFix: {
     paddingLeft: 0,
   },
+  dummyMessagesEnd: {
+    float:'left',
+    clear: 'both',
+  },
 });
-
-const noMessagesText = "No messages yet";
 
 export class ChatRoomPane extends Component {
   constructor(props) {
@@ -154,7 +156,7 @@ export class ChatRoomPane extends Component {
             <Fragment>
               <List  dense={true} className={classes.rootList} >
                 { messagesList }
-                <div ref={this.messagesEnd} style={ {float:'left', clear: 'both'} } />
+                <div ref={this.messagesEnd} className={ classes.dummyMessagesEnd } />
               </List>
               
             </Fragment>
