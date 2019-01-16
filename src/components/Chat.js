@@ -69,6 +69,7 @@ class Chat extends Component {
   handleClose = () => {
     this.setState({ friendDialogOpen: false });
     this.fetchUsers();
+    window.location.reload();
   }
 
   fetchUsers = () => {

@@ -13,7 +13,6 @@ class App extends Component {
   }
 
   updateUser = (user) => {
-    console.log('we rock!');
     this.setState({
       user
     });
